@@ -44,8 +44,6 @@ namespace budget_tracker
             {
                 Console.WriteLine(exception);
             }
-
-            Console.ReadLine();
         }
 
     }
