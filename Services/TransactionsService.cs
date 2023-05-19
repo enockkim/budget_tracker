@@ -17,27 +17,21 @@ namespace budget_tracker.Services
         }
 
         //Transactions
-        public bool SaveTransaction(general_ledger transactions)
-        {
-            general_ledger _trasaction = new general_ledger()
-            {
-            };
-
-            _trasaction = transactions;
-
+        public Tuple<bool, int> SaveTransaction(general_ledger transactions)
+        {   
             try
             {
                 var res = budgetTrackerDbContext.Add<general_ledger>(transactions);
-                budgetTrackerDbContext.SaveChanges();
+                var result = budgetTrackerDbContext.SaveChanges();
 
                 Console.WriteLine("Transaction Saved ->  Account: "+transactions.Account_fk.ToString()+ "Amount: " + transactions.Amount.ToString());    
 
-                return true;
+                return Tuple.Create(true, transactions.TransactionId);
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
-                return false;
+                return Tuple.Create(false, 0);
             }
         }
     }

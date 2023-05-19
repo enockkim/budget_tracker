@@ -1,9 +1,15 @@
+using budget_tracker;
 using budget_tracker.Services;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 using System.Configuration;
 using System.Net;
+
+
+
+BulkSms.SendSms();
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +24,7 @@ builder.Host.UseSerilog(
 var connectionString = builder.Configuration.GetConnectionString("MySqlConnectionString"); 
 builder.Services.AddDbContextPool<BudgetTrackerDbContext>(options => options.UseMySQL(connectionString));
 builder.Services.AddScoped<ITransactionsService, TransactionsService>();
+builder.Services.AddScoped<IFeePaymentService, FeePaymentService>();
 builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddControllers();

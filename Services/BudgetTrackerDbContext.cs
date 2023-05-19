@@ -13,6 +13,7 @@ namespace budget_tracker.Services
     {
         public DbSet<Users> Users { set; get; }
         public DbSet<general_ledger> general_ledger { set; get; }
+        public DbSet<fee_payment> fee_payment { set; get; }
         public BudgetTrackerDbContext(DbContextOptions<BudgetTrackerDbContext> options) : base(options)
         {
         }

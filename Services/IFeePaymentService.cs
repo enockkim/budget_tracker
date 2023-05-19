@@ -9,9 +9,9 @@ using budget_tracker.Models;
 
 namespace budget_tracker.Services
 {
-    public interface ITransactionsService
+    public interface IFeePaymentService
     {
         //Transactions
-        Tuple<bool, int> SaveTransaction(general_ledger transaction);
+        bool SaveFeePayment(fee_payment transaction);
     }
 }
