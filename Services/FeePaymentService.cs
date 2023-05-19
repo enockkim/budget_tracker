@@ -22,8 +22,9 @@ namespace budget_tracker.Services
             {
                 var res = budgetTrackerDbContext.Add<fee_payment>(fee_payment);
                 var result = budgetTrackerDbContext.SaveChanges();
+                                
+                Console.WriteLine("Fee payment saved ->  Account/Index: "+fee_payment.AccountNo);    
 
-                Console.WriteLine("Fee paymen saved ->  Account/Index: "+fee_payment.AccountNo);    
 
                 return true;
             }

@@ -30,7 +30,7 @@ namespace budget_tracker
             var username = "lifeway";
             var apiKey = "0397ce461d588c159c9f337785fc49b15e87a78306e4120bcf7505bf5bf0814e";
             var recep = contact;
-            var msg = contact;
+            var msg = message;
 
 
             var gateway = new AfricasTalkingGateway(username, apiKey);

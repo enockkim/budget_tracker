@@ -7,10 +7,6 @@ using System.Configuration;
 using System.Net;
 
 
-
-BulkSms.SendSms();
-
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.

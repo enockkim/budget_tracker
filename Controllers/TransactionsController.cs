@@ -82,9 +82,11 @@ namespace budget_tracker.Controllers
             //Send sms
             //TODO need to change since msisdn will phased
             string message = $"Your payment of Ksh. {transaction.Amount} for {transaction.Account_fk} has been recieved. Thank you.";
+            string messageAdmin = $"Payment of Ksh. {transaction.Amount} for {transaction.Account_fk} has been recieved. Current balance is Ksh. {context.OrgAccountBalance}";
             //BulkSms.SendSms(context.MSISDN, message); //Send to parent/ whoever initialized the payment
             //BulkSms.SendSms("+254712345678", message); //Send to bursar need to get school simcard
-            BulkSms.SendSms("+254712490863", message); //Send to me for testing
+            BulkSms.SendSms("+254712490863", messageAdmin); //Send to me for testing
+            BulkSms.SendSms("+254797303073", messageAdmin); //Send to me for testing
         }
 
         public bool IsReusable
