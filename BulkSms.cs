@@ -18,13 +18,8 @@ using PhoneNumbers;
 
 namespace budget_tracker
 {
-
-    /// <summary>
-    /// The africas talking gateway class. Accepting sandbox as an environment
-    /// </summary>
     public class BulkSms
     {
-
         public static void SendSms(string contact, string message)
         {
             var username = "lifeway";
@@ -38,11 +33,12 @@ namespace budget_tracker
             {
                 dynamic res = gateway.SendMessage(recep, msg);
                 Console.WriteLine(res);
-
+                Logging.WriteToLog($"Sms Sent: {res}", "Information");
             }
             catch (AfricasTalkingGatewayException exception)
             {
                 Console.WriteLine(exception);
+                Logging.WriteToLog($"SendSms: {exception}", "Error");
             }
         }
 

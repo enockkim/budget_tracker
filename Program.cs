@@ -6,7 +6,6 @@ using Serilog;
 using System.Configuration;
 using System.Net;
 
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -58,5 +57,7 @@ app.MapControllers();
 //app.Urls.Add("https://0.0.0.0:5001");
 
 Console.WriteLine("All resources loaded, application running...");
+
+Logging.WriteToLog("All resources loaded, application running...", "Information");
 
 app.Run();
