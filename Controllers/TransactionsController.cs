@@ -86,7 +86,7 @@ namespace budget_tracker.Controllers
             //BulkSms.SendSms(context.MSISDN, message); //Send to parent/ whoever initialized the payment
             //BulkSms.SendSms("+254712345678", message); //Send to bursar need to get school simcard
             BulkSms.SendSms("+254712490863", messageAdmin); //Send to me for testing
-            BulkSms.SendSms("+254797303073", messageAdmin); //Send to me for testing
+            //BulkSms.SendSms("+254797303073", messageAdmin); //Send to me for testing
         }
 
         public bool IsReusable
