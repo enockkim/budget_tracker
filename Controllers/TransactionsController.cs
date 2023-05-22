@@ -40,6 +40,7 @@ namespace budget_tracker.Controllers
         [HttpGet("Test")]
         public bool Test()
         {
+            Logging.WriteToLog($"True", "Information");
             return true;
         }
 
