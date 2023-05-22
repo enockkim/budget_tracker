@@ -37,6 +37,12 @@ namespace budget_tracker.Controllers
         //    return groupService.GetMemberById(memberId);
         //}
 
+        [HttpGet("Test")]
+        public bool Test()
+        {
+            return true;
+        }
+
         // POST api/<MembersController>
         [HttpPost("SaveTransaction")]
         public bool Post([FromBody] general_ledger transaction)
