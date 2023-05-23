@@ -2,8 +2,10 @@
 using budget_tracker.Services;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using System.Globalization;
 using System.Transactions;
+using static Org.BouncyCastle.Math.EC.ECCurve;
 
 namespace budget_tracker.Controllers
 {
@@ -16,12 +18,16 @@ namespace budget_tracker.Controllers
         private IFeePaymentService feePaymentService;
         CultureInfo provider = CultureInfo.InvariantCulture;
 
-        public TransactionsController(ILogger<TransactionsController> logger, ITransactionsService _transactionService, IFeePaymentService _feePaymentService)
+        private readonly AppSetting settings;
+
+        public TransactionsController(ILogger<TransactionsController> logger, ITransactionsService _transactionService, IFeePaymentService _feePaymentService, IOptionsMonitor<AppSetting> _settings)
         {
             _logger = logger;
             transactionService = _transactionService;
             feePaymentService = _feePaymentService;
+            settings = _settings.CurrentValue;
         }
+
 
         //// GET: api/<MembersController>
         //[HttpGet("GetAllMembers")]
@@ -40,7 +46,10 @@ namespace budget_tracker.Controllers
         [HttpGet("Test")]
         public bool Test()
         {
-            Logging.WriteToLog($"True", "Information");
+            foreach (var contact in settings.AdminContacts)
+            {
+                Console.WriteLine(contact);
+            }
             return true;
         }
 
@@ -94,9 +103,10 @@ namespace budget_tracker.Controllers
             string messageAdmin = $"Payment of Ksh. {transaction.Amount} for {context.BillRefNumber} has been recieved. Current balance is Ksh. {context.OrgAccountBalance}";
             //BulkSms.SendSms(context.MSISDN, message); //Send to parent/ whoever initialized the payment
             //BulkSms.SendSms("+254712345678", message); //Send to bursar need to get school simcard
-            BulkSms.SendSms("+254712490863", messageAdmin); //Send to me for testing
-            BulkSms.SendSms("+254712290257", messageAdmin); //Send to me for testing
-            //BulkSms.SendSms("+254797303073", messageAdmin); //Send to me for testing
+            foreach(var contact in settings.AdminContacts)
+            {
+                BulkSms.SendSms(contact, messageAdmin);
+            }
         }
 
         public bool IsReusable
