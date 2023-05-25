@@ -14,6 +14,10 @@ namespace budget_tracker
             settings = _settings.CurrentValue;
         }
 
+        public TelegramBot()
+        {
+        }
+
         public void SendMessage(string message)
         {
             bot = new TelegramBotClient(settings.TelegramToken);

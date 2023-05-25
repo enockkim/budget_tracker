@@ -25,6 +25,14 @@ namespace budget_tracker
     {
         private static string DirectoryPath;
         private static string FilePath;
+
+        private readonly TelegramBot telegramBot;
+
+        public Logging(TelegramBot _telegramBot)
+        {
+            telegramBot = _telegramBot;
+        }
+        
         private static void CheckFolder()
         {
             string logDay = String.Empty;
@@ -49,7 +57,7 @@ namespace budget_tracker
             }
         }
 
-        public static void WriteToLog(string message, string messageType)
+        public void WriteToLog(string message, string messageType)
         {
             CheckFolder();
 
@@ -61,9 +69,11 @@ namespace budget_tracker
             {
                 case "Information":
                     log.Information(message);
+                    telegramBot.SendMessage(message);
                     break;
                 case "Error":
                     log.Error(message);
+                    telegramBot.SendMessage("⚠️ An error occured!");
                     break;
                 case "Debug":
                     log.Debug(message);

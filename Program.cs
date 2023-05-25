@@ -20,8 +20,10 @@ builder.Host.UseSerilog(
 // Setup database connection    
 var connectionString = builder.Configuration.GetConnectionString("MySqlConnectionString");
 builder.Services.Configure<AppSetting>(builder.Configuration.GetSection("AppSetting"));
-builder.Services.AddSingleton<BulkSms>();
 builder.Services.AddSingleton<TelegramBot>();
+builder.Services.AddSingleton<Logging>();
+builder.Services.AddSingleton<BulkSms>();
+builder.Services.AddHostedService<StartupService>();
 builder.Services.AddDbContextPool<BudgetTrackerDbContext>(options => options.UseMySQL(connectionString));
 builder.Services.AddScoped<ITransactionsService, TransactionsService>();
 builder.Services.AddScoped<IFeePaymentService, FeePaymentService>();
@@ -63,6 +65,7 @@ app.MapControllers();
 
 Console.WriteLine("All resources loaded, application running...");
 
-Logging.WriteToLog("All resources loaded, application running...", "Information");
+//Logging logging = new Logging();
+//logging.WriteToLog("All resources loaded, application running...", "Information");
 
 app.Run();

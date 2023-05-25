@@ -25,10 +25,12 @@ namespace budget_tracker
     public class BulkSms
     {
         private readonly AppSetting settings;
+        private readonly Logging logging;
 
-        public BulkSms(IOptionsMonitor<AppSetting> _settings)
+        public BulkSms(IOptionsMonitor<AppSetting> _settings, Logging logging)
         {
             settings = _settings.CurrentValue;
+            this.logging = logging;
         }
 
         public void SendSms(string contact, string message)
@@ -47,7 +49,7 @@ namespace budget_tracker
 
                 if(statusCode == 101)
                 {
-                    Logging.WriteToLog($"Sms Sent: {res}", "Information");
+                    logging.WriteToLog($"Sms Sent: {res}", "Debug");
                 } else
                 {
 
@@ -58,7 +60,7 @@ namespace budget_tracker
             catch (AfricasTalkingGatewayException exception)
             {
                 Console.WriteLine(exception);
-                Logging.WriteToLog($"SendSms: {exception}", "Error");
+                logging.WriteToLog($"SendSms: {exception}", "Error");
             }
         }
 

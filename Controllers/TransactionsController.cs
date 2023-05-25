@@ -21,15 +21,17 @@ namespace budget_tracker.Controllers
         private readonly AppSetting settings;
         private readonly BulkSms bulkSms;
         private readonly TelegramBot telegramBot;
+        private readonly Logging logging;
 
-        public TransactionsController(ILogger<TransactionsController> logger, ITransactionsService _transactionService, IFeePaymentService _feePaymentService, IOptionsMonitor<AppSetting> _settings, BulkSms _bulkSms, TelegramBot _telegramBot)
+        public TransactionsController(ILogger<TransactionsController> logger, ITransactionsService _transactionService, IFeePaymentService _feePaymentService, IOptionsMonitor<AppSetting> _settings, BulkSms _bulkSms, TelegramBot _telegramBot, Logging logging)
         {
             _logger = logger;
             transactionService = _transactionService;
             feePaymentService = _feePaymentService;
             settings = _settings.CurrentValue;
             bulkSms = _bulkSms;
-            telegramBot = _telegramBot; 
+            telegramBot = _telegramBot;
+            this.logging = logging;
         }
 
 
@@ -67,7 +69,7 @@ namespace budget_tracker.Controllers
             // Log the response
             Console.WriteLine($"Name: {context.FirstName} {context.MiddleName} {context.LastName} Amount:  {context.TransAmount} Acc:  {context.BillRefNumber}");
 
-            Logging.WriteToLog($"Name: {context.FirstName} {context.MiddleName} {context.LastName} Amount:  {context.TransAmount} Acc:  {context.BillRefNumber}", "Information");
+            logging.WriteToLog($"Name: {context.FirstName} {context.MiddleName} {context.LastName} Amount:  {context.TransAmount} Acc:  {context.BillRefNumber}", "Information");
 
             general_ledger transaction = new general_ledger()
             {
