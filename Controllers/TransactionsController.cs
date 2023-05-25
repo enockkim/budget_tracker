@@ -19,13 +19,17 @@ namespace budget_tracker.Controllers
         CultureInfo provider = CultureInfo.InvariantCulture;
 
         private readonly AppSetting settings;
+        private readonly BulkSms bulkSms;
+        private readonly TelegramBot telegramBot;
 
-        public TransactionsController(ILogger<TransactionsController> logger, ITransactionsService _transactionService, IFeePaymentService _feePaymentService, IOptionsMonitor<AppSetting> _settings)
+        public TransactionsController(ILogger<TransactionsController> logger, ITransactionsService _transactionService, IFeePaymentService _feePaymentService, IOptionsMonitor<AppSetting> _settings, BulkSms _bulkSms, TelegramBot _telegramBot)
         {
             _logger = logger;
             transactionService = _transactionService;
             feePaymentService = _feePaymentService;
             settings = _settings.CurrentValue;
+            bulkSms = _bulkSms;
+            telegramBot = _telegramBot; 
         }
 
 
@@ -46,10 +50,7 @@ namespace budget_tracker.Controllers
         [HttpGet("Test")]
         public bool Test()
         {
-            foreach (var contact in settings.AdminContacts)
-            {
-                Console.WriteLine(contact);
-            }
+            telegramBot.SendMessage("test");
             return true;
         }
 
@@ -105,8 +106,10 @@ namespace budget_tracker.Controllers
             //BulkSms.SendSms("+254712345678", message); //Send to bursar need to get school simcard
             foreach(var contact in settings.AdminContacts)
             {
-                BulkSms.SendSms(contact, messageAdmin);
+                bulkSms.SendSms(contact, messageAdmin);
             }
+
+            telegramBot.SendMessage(messageAdmin); //for me to save on sms cost
         }
 
         public bool IsReusable

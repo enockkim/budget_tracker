@@ -12,28 +12,48 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Web;
 using AfricasTalkingCS;
+using budget_tracker.Controllers;
+using budget_tracker.Services;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using PhoneNumbers;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace budget_tracker
 {
     public class BulkSms
     {
-        public static void SendSms(string contact, string message)
+        private readonly AppSetting settings;
+
+        public BulkSms(IOptionsMonitor<AppSetting> _settings)
         {
-            var username = "lifeway";
-            var apiKey = "0397ce461d588c159c9f337785fc49b15e87a78306e4120bcf7505bf5bf0814e";
+            settings = _settings.CurrentValue;
+        }
+
+        public void SendSms(string contact, string message)
+        {
             var recep = contact;
             var msg = message;
 
 
-            var gateway = new AfricasTalkingGateway(username, apiKey);
+            var gateway = new AfricasTalkingGateway(settings.Username, settings.ApiKey);
             try
             {
                 dynamic res = gateway.SendMessage(recep, msg);
                 Console.WriteLine(res);
-                Logging.WriteToLog($"Sms Sent: {res}", "Information");
+
+                int statusCode = res.SMSMessageData.Recipients[0].statusCode;
+
+                if(statusCode == 101)
+                {
+                    Logging.WriteToLog($"Sms Sent: {res}", "Information");
+                } else
+                {
+
+                }
+
+                
             }
             catch (AfricasTalkingGatewayException exception)
             {

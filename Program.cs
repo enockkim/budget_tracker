@@ -7,6 +7,7 @@ using System.Configuration;
 using System.Net;
 using static Org.BouncyCastle.Math.EC.ECCurve;
 
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -19,6 +20,8 @@ builder.Host.UseSerilog(
 // Setup database connection    
 var connectionString = builder.Configuration.GetConnectionString("MySqlConnectionString");
 builder.Services.Configure<AppSetting>(builder.Configuration.GetSection("AppSetting"));
+builder.Services.AddSingleton<BulkSms>();
+builder.Services.AddSingleton<TelegramBot>();
 builder.Services.AddDbContextPool<BudgetTrackerDbContext>(options => options.UseMySQL(connectionString));
 builder.Services.AddScoped<ITransactionsService, TransactionsService>();
 builder.Services.AddScoped<IFeePaymentService, FeePaymentService>();
