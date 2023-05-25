@@ -102,14 +102,18 @@ namespace budget_tracker.Controllers
             //TODO need to change since msisdn will phased
             string message = $"Your payment of Ksh. {transaction.Amount} for {transaction.Account_fk} has been recieved. Thank you.";
             string messageAdmin = $"Payment of Ksh. {transaction.Amount} for {context.BillRefNumber} has been recieved. Current balance is Ksh. {context.OrgAccountBalance}";
+            string messageAdminTelegram = $"Recieved: Ksh. {transaction.Amount} Balance: Ksh. {context.OrgAccountBalance} Account: {context.BillRefNumber}";
             //BulkSms.SendSms(context.MSISDN, message); //Send to parent/ whoever initialized the payment
-            //BulkSms.SendSms("+254712345678", message); //Send to bursar need to get school simcard
-            foreach(var contact in settings.AdminContacts)
+
+            if (!context.BillRefNumber.Equals("test"))
             {
-                bulkSms.SendSms(contact, messageAdmin);
+                foreach (var contact in settings.AdminContacts)
+                {
+                    bulkSms.SendSms(contact, messageAdmin);
+                }
             }
 
-            telegramBot.SendMessage(messageAdmin); //for me to save on sms cost
+            telegramBot.SendMessage(messageAdminTelegram); //for me to save on sms cost
         }
 
         public bool IsReusable
