@@ -26,41 +26,33 @@ namespace budget_tracker
     {
         private readonly AppSetting settings;
         private readonly Logging logging;
-
-        public BulkSms(IOptionsMonitor<AppSetting> _settings, Logging logging)
+        private readonly TelegramBot telegram;
+        public BulkSms(IOptionsMonitor<AppSetting> settings, Logging logging, TelegramBot telegram)
         {
-            settings = _settings.CurrentValue;
+            this.settings = settings.CurrentValue;
             this.logging = logging;
+            this.telegram = telegram;
         }
 
-        public void SendSms(string contact, string message)
+        public Task<int> SendSms(string contact, string message)
         {
             var recep = contact;
             var msg = message;
+            
 
 
             var gateway = new AfricasTalkingGateway(settings.Username, settings.ApiKey);
             try
             {
-                dynamic res = gateway.SendMessage(recep, msg);
-                Console.WriteLine(res);
+                var res = gateway.SendMessage(recep, msg);
 
-                int statusCode = res.SMSMessageData.Recipients[0].statusCode;
-
-                if(statusCode == 101)
-                {
-                    logging.WriteToLog($"Sms Sent: {res}", "Debug");
-                } else
-                {
-
-                }
-
-                
+                return res.SMSMessageData.Recipients[0].statusCode;
             }
             catch (AfricasTalkingGatewayException exception)
             {
                 Console.WriteLine(exception);
                 logging.WriteToLog($"SendSms: {exception}", "Error");
+                return (dynamic)exception;
             }
         }
 

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using System.Globalization;
 using System.Transactions;
+using Telegram.Bot.Types;
 using static Org.BouncyCastle.Math.EC.ECCurve;
 
 namespace budget_tracker.Controllers
@@ -22,8 +23,9 @@ namespace budget_tracker.Controllers
         private readonly BulkSms bulkSms;
         private readonly TelegramBot telegramBot;
         private readonly Logging logging;
+        private readonly PollyPolicy pollyPolicy;
 
-        public TransactionsController(ILogger<TransactionsController> logger, ITransactionsService _transactionService, IFeePaymentService _feePaymentService, IOptionsMonitor<AppSetting> _settings, BulkSms _bulkSms, TelegramBot _telegramBot, Logging logging)
+        public TransactionsController(ILogger<TransactionsController> logger, ITransactionsService _transactionService, IFeePaymentService _feePaymentService, IOptionsMonitor<AppSetting> _settings, BulkSms _bulkSms, TelegramBot _telegramBot, Logging logging, PollyPolicy pollyPolicy)
         {
             _logger = logger;
             transactionService = _transactionService;
@@ -32,6 +34,7 @@ namespace budget_tracker.Controllers
             bulkSms = _bulkSms;
             telegramBot = _telegramBot;
             this.logging = logging;
+            this.pollyPolicy = pollyPolicy;
         }
 
 
@@ -52,6 +55,7 @@ namespace budget_tracker.Controllers
         [HttpGet("Test")]
         public bool Test()
         {
+            //pollyPolicy.AfricasTalkingRetry.Execute(bulkSms.SendSms("+254712490863", "test"));
             telegramBot.SendMessage("test");
             return true;
         }
@@ -67,7 +71,7 @@ namespace budget_tracker.Controllers
         public void ProcessRequest([FromBody] mpesa_c2b_result context)
         {
             // Log the response
-            Console.WriteLine($"Name: {context.FirstName} {context.MiddleName} {context.LastName} Amount:  {context.TransAmount} Acc:  {context.BillRefNumber}");
+            Console.WriteLine($"RefNo: {context.TransID} Name: {context.FirstName} {context.MiddleName} {context.LastName} Amount:  {context.TransAmount} Acc:  {context.BillRefNumber}");
 
             logging.WriteToLog($"Name: {context.FirstName} {context.MiddleName} {context.LastName} Amount:  {context.TransAmount} Acc:  {context.BillRefNumber}", "Information");
 
@@ -103,7 +107,7 @@ namespace budget_tracker.Controllers
             //Send sms
             //TODO need to change since msisdn will phased
             string message = $"Your payment of Ksh. {transaction.Amount} for {transaction.Account_fk} has been recieved. Thank you.";
-            string messageAdmin = $"Payment of Ksh. {transaction.Amount} for {context.BillRefNumber} has been recieved. Current balance is Ksh. {context.OrgAccountBalance}";
+            string messageAdmin = $"Payment of Ksh. {transaction.Amount} for {context.BillRefNumber} has been recieved. RefNo: {context.TransID} . Current balance is Ksh. {context.OrgAccountBalance}";
             string messageAdminTelegram = $"Recieved: Ksh. {transaction.Amount} Balance: Ksh. {context.OrgAccountBalance} Account: {context.BillRefNumber}";
             //BulkSms.SendSms(context.MSISDN, message); //Send to parent/ whoever initialized the payment
 
@@ -112,6 +116,16 @@ namespace budget_tracker.Controllers
                 foreach (var contact in settings.AdminContacts)
                 {
                     bulkSms.SendSms(contact, messageAdmin);
+                    //int statusCode = pollyPolicy.AfricasTalkingRetry.Execute(bulkSms.SendSms(contact, messageAdmin));
+
+                    //if (statusCode == 101)
+                    //{
+                    //logging.WriteToLog($"Sms Sent: {res}", "Debug");
+                    //}
+                    //else if (statusCode == 405)
+                    //{
+                    //telegramBot.SendMessage("Insufficient funds.");
+                    //}
                 }
             }
 

@@ -23,6 +23,7 @@ builder.Services.Configure<AppSetting>(builder.Configuration.GetSection("AppSett
 builder.Services.AddSingleton<TelegramBot>();
 builder.Services.AddSingleton<Logging>();
 builder.Services.AddSingleton<BulkSms>();
+builder.Services.AddSingleton<PollyPolicy>();
 builder.Services.AddHostedService<StartupService>();
 builder.Services.AddDbContextPool<BudgetTrackerDbContext>(options => options.UseMySQL(connectionString));
 builder.Services.AddScoped<ITransactionsService, TransactionsService>();
