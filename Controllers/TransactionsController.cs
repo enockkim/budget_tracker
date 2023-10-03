@@ -108,7 +108,7 @@ namespace budget_tracker.Controllers
             //TODO need to change since msisdn will phased
             string message = $"Your payment of Ksh. {transaction.Amount} for {transaction.Account_fk} has been recieved. Thank you.";
             string messageAdmin = $"Payment of Ksh. {transaction.Amount} for {context.BillRefNumber} has been recieved. RefNo: {context.TransID} . Current balance is Ksh. {context.OrgAccountBalance}";
-            string messageAdminTelegram = $"Recieved: Ksh. {transaction.Amount} Balance: Ksh. {context.OrgAccountBalance} Account: {context.BillRefNumber}";
+            string messageAdminTelegram = $"Recieved: Ksh. {transaction.Amount} Balance: Ksh. {context.OrgAccountBalance} Account: {context.BillRefNumber} RefNo: {context.TransID}";
             //BulkSms.SendSms(context.MSISDN, message); //Send to parent/ whoever initialized the payment
 
             if (!context.BillRefNumber.Equals("test"))
