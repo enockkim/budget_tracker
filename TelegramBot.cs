@@ -20,8 +20,13 @@ namespace budget_tracker
 
         public void SendMessage(string message)
         {
+#if DEBUG
+            bot = new TelegramBotClient(settings.TelegramToken);
+            bot.SendTextMessageAsync(settings.TelegramChatId, "🐞\r"+message);
+#else
             bot = new TelegramBotClient(settings.TelegramToken);
             bot.SendTextMessageAsync(settings.TelegramChatId, message);
+#endif
         }
     }
 }

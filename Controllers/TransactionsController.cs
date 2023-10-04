@@ -129,7 +129,7 @@ namespace budget_tracker.Controllers
                 }
             }
 
-            telegramBot.SendMessage(messageAdminTelegram); //for me to save on sms cost
+            //telegramBot.SendMessage(messageAdminTelegram); //for me to save on sms cost
         }
 
         public bool IsReusable
