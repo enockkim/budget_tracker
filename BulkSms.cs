@@ -51,8 +51,14 @@ namespace budget_tracker
             catch (AfricasTalkingGatewayException exception)
             {
                 Console.WriteLine(exception);
-                logging.WriteToLog($"SendSms: {exception}", "Error");
+                logging.WriteToLog($"SendSms: {exception}", "AfricasTalkingGatewayException");
                 return (dynamic)exception;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                logging.WriteToLog($"SendSms: {ex}", "Error");
+                return (dynamic)ex;
             }
         }
 
