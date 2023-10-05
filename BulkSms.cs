@@ -35,12 +35,11 @@ namespace budget_tracker
             this.telegram = telegram;
         }
 
-        public Task<int> SendSms(string contact, string message)
+        public bool SendSms(string contact, string message)
         {
             var recep = contact;
             var msg = message;
             
-
 
             var gateway = new AfricasTalkingGateway(settings.Username, settings.ApiKey);
             try
@@ -59,19 +58,19 @@ namespace budget_tracker
                     logging.WriteToLog($"Number: {number}, Status: {status}", "Information");
                 }
 
-                return res;
+                return true;
             }
             catch (AfricasTalkingGatewayException exception)
             {
                 Console.WriteLine(exception);
                 logging.WriteToLog($"AfricasTalkingGatewayException, SendSms: {exception}", "Error");
-                return (dynamic)exception;
+                return false;
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex);
                 logging.WriteToLog($"SendSms: {ex}", "Error");
-                return (dynamic)ex;
+                return false;
             }
         }
 

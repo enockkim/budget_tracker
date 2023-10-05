@@ -73,7 +73,7 @@ namespace budget_tracker.Controllers
             // Log the response
             Console.WriteLine($"RefNo: {context.TransID} Name: {context.FirstName} {context.MiddleName} {context.LastName} Amount:  {context.TransAmount} Acc:  {context.BillRefNumber}");
 
-            logging.WriteToLog($"Name: {context.FirstName} {context.MiddleName} {context.LastName} Amount:  {context.TransAmount} Acc:  {context.BillRefNumber}", "Information");
+            logging.WriteToLog($"Name: {context.FirstName} {context.MiddleName} {context.LastName} Acc:  {context.BillRefNumber} Amount:  {context.TransAmount} Balance: {context.OrgAccountBalance}", "Information");
 
             general_ledger transaction = new general_ledger()
             {
