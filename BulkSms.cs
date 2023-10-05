@@ -14,6 +14,7 @@ using System.Web;
 using AfricasTalkingCS;
 using budget_tracker.Controllers;
 using budget_tracker.Services;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -46,12 +47,24 @@ namespace budget_tracker
             {
                 var res = gateway.SendMessage(recep, msg);
 
-                return res.SMSMessageData.Recipients[0].statusCode;
+                JToken root = JToken.FromObject(res);
+
+                JArray recipientsArray = (JArray)root["SMSMessageData"]["Recipients"];
+
+                foreach (JToken recipient in recipientsArray)
+                {
+                    string number = recipient["number"].ToString();
+                    string status = recipient["status"].ToString();
+
+                    logging.WriteToLog($"Number: {number}, Status: {status}", "Information");
+                }
+
+                return res;
             }
             catch (AfricasTalkingGatewayException exception)
             {
                 Console.WriteLine(exception);
-                logging.WriteToLog($"SendSms: {exception}", "AfricasTalkingGatewayException");
+                logging.WriteToLog($"AfricasTalkingGatewayException, SendSms: {exception}", "Error");
                 return (dynamic)exception;
             }
             catch (Exception ex)
