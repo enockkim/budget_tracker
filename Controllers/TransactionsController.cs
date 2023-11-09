@@ -60,6 +60,304 @@ namespace budget_tracker.Controllers
             return true;
         }
 
+        [HttpGet("shipment")]
+        public ActionResult GetShipmentDetails()
+        {
+            var shipment = new
+            {
+                shipmentId = "E07PWLP1PN2C5IPI",
+                scac = "MAEU",
+                carrier = "Maersk",
+                transportDocumentId = "G9O2KF9IC9",
+                transportDocumentType = "BL",
+                containers = new List<object>
+            {
+                new { id = "BMOU6909XXX", isoCode = "42V0" },
+                new { id = "CAAU5517XXX", isoCode = "45G1" },
+                new { id = "CARU5172XXX", isoCode = "45G1" }
+            },
+                tags = new List<string> { "exampleTag", "anotherTag" },
+                shipmentStatus = 5,
+                plannedEta = DateTime.UtcNow.AddMonths(9).ToString("yyyy-MM-ddTHH:mm:ssZ"),
+                originPortId = 1010,
+                originPortName = "TANJUNG PELEPAS",
+                originPortUnlocode = "MYTPP",
+                originPortCountry = "MALAYSIA",
+                originPortLocalTimeOffset = 8,
+                originPortPredictiveDepartureUtc = "2022-02-01T04:18:00Z",
+                originPortActualDepartureUtc = "2022-02-01T10:32:00Z",
+                finalPortId = 87,
+                finalPortName = "LOS ANGELES",
+                finalPortUnlocode = "USLAX",
+                finalPortCountry = "USA",
+                finalPortLocalTimeOffset = -7,
+                finalPortPredictiveArrivalUtc = "2022-03-27T13:00:00Z",
+                finalPortPredictiveArrivalUtcLast = "2022-03-27T13:00:00Z",
+                finalPortActualArrivalUtc = "",
+                finalPortAnchorageActualArrivalUtc = "",
+                finalPortTerminalActualArrivalUtc = "2022-11-29T11:21:00Z",
+                finalPortTerminalActualArrivalName = "Halterm Container Terminal",
+                finalPortTerminalActualArrivalSMDG = "HAFXT",
+                vesselName = "MAERSK ENSENADA",
+                vesselIMONumber = 9502958,
+                vesselShipId = 199849,
+                vesselVoyageStatus = "22",
+                vesselArea = "WMED - West Mediterranean",
+                currentPortId = 4324,
+                currentPortName = "CARDIFF",
+                currentPortUnlocode = "GBCDF",
+                currentCarrierVoyageNumber = "206N",
+                nextPortId = 87,
+                nextPortName = "LOS ANGELES",
+                nextPortUnlocode = "USLAX",
+                nextPortDistanceToGo = 2643,
+                nextPortPredictiveArrivalUtc = "2022-03-27T13:00:00Z",
+                webViewUrl = "https://www.marinetraffic.com/track-shipment?id=ΧΧΧΧΧΧ",
+                lastCarrierUpdatedTimestamp = "2023-03-03T01:12:06Z",
+                transportationPlan = new
+                {
+                    routes = new List<object>
+                {
+                    new
+                    {
+                        carrierVoyageNumber = "152E",
+                        departure = new { eventId = 567382 },
+                        arrival = new { eventId = 567383 }
+                    },
+                    new
+                    {
+                        carrierVoyageNumber = "206N",
+                        departure = new { eventId = 567388 },
+                        arrival = new { eventId = 567389 }
+                    }
+                },
+                    events = new List<object>
+                {
+                    new
+                    {
+                        eventId = 567380,
+                        eventTypeCode = "CEP",
+                        eventTypeDescription = "Container empty to shipper",
+                        eventCategory = "LAND",
+                        eventDatetime = "2022-01-26T15:40:00Z",
+                        eventStatus = "ACT",
+                        carrierVoyageNumber = "",
+                        vessel = new { shipId = "" },
+                        location = new { portId = 1634 }
+                    },
+                    new
+                    {
+                        eventId = 567381,
+                        eventTypeCode = "CGI",
+                        eventTypeDescription = "Container gate in at POL (Port of Load)",
+                        eventCategory = "LAND",
+                        eventDatetime = "2022-01-27T19:26:00Z",
+                        eventStatus = "ACT",
+                        carrierVoyageNumber = "",
+                        vessel = new { shipId = "" },
+                        location = new { portId = 1010 }
+                    },
+                    new
+                    {
+                        eventId = 567382,
+                        eventTypeCode = "CLL",
+                        eventTypeDescription = "Container loaded at first POL (Port of Load)",
+                        eventCategory = "SEA",
+                        eventDatetime = "2022-02-01T04:18:00Z",
+                        eventStatus = "ACT",
+                        carrierVoyageNumber = "152E",
+                        vessel = new { shipId = 733029 },
+                        location = new { portId = 1010 }
+                    },
+                    new
+                    {
+                        eventId = 567383,
+                        eventTypeCode = "CDT",
+                        eventTypeDescription = "Container discharge at T/S port (Transhipment Port)",
+                        eventCategory = "SEA",
+                        eventDatetime = "2022-02-09T11:46:00Z",
+                        eventStatus = "ACT",
+                        carrierVoyageNumber = "152E",
+                        vessel = new { shipId = 733029 },
+                        location = new { portId = 959 }
+                    },
+                    new
+                    {
+                        eventId = 567384,
+                        eventTypeCode = "LTS",
+                        eventTypeDescription = "Land transshipment",
+                        eventCategory = "LAND",
+                        eventDatetime = "2022-02-14T14:19:00Z",
+                        eventStatus = "ACT",
+                        carrierVoyageNumber = "",
+                        vessel = new { shipId = "" },
+                        location = new { portId = 959 }
+                    },
+                    new
+                    {
+                        eventId = 567385,
+                        eventTypeCode = "LTS",
+                        eventTypeDescription = "Land transshipment",
+                        eventCategory = "LAND",
+                        eventDatetime = "2022-02-14T14:32:00Z",
+                        eventStatus = "ACT",
+                        carrierVoyageNumber = "",
+                        vessel = new { shipId = "" },
+                        location = new { portId = 959 }
+                    },
+                    new
+                    {
+                        eventId = 567386,
+                        eventTypeCode = "LTS",
+                        eventTypeDescription = "Land transshipment",
+                        eventCategory = "LAND",
+                        eventDatetime = "2022-02-15T04:20:00Z",
+                        eventStatus = "ACT",
+                        carrierVoyageNumber = "",
+                        vessel = new { shipId = "" },
+                        location = new { portId = 959 }
+                    },
+                    new
+                    {
+                        eventId = 567387,
+                        eventTypeCode = "LTS",
+                        eventTypeDescription = "Land transshipment",
+                        eventCategory = "LAND",
+                        eventDatetime = "2022-02-15T13:03:00Z",
+                        eventStatus = "ACT",
+                        carrierVoyageNumber = "",
+                        vessel = new { shipId = "" },
+                        location = new { portId = 959 }
+                    },
+                    new
+                    {
+                        eventId = 567388,
+                        eventTypeCode = "CLT",
+                        eventTypeDescription = "Container loaded at T/S port (Transhipment Port)",
+                        eventCategory = "SEA",
+                        eventDatetime = "2022-02-18T23:39:00Z",
+                        eventStatus = "ACT",
+                        carrierVoyageNumber = "206N",
+                        vessel = new { shipId = 199849 },
+                        location = new { portId = 959 }
+                    },
+                    new
+                    {
+                        eventId = 567389,
+                        eventTypeCode = "CDD",
+                        eventTypeDescription = "Container discharge at final POD (Port of Discharge)",
+                        eventCategory = "SEA",
+                        eventDatetime = "2022-03-25T07:00:00Z",
+                        eventStatus = "PLN",
+                        carrierVoyageNumber = "206N",
+                        vessel = new { shipId = 199849 },
+                        location = new { portId = 87 }
+                    },
+                    new
+                    {
+                        eventId = 567390,
+                        eventTypeCode = "CGO",
+                        eventTypeDescription = "Container gate out at POD (Port of Discharge)",
+                        eventCategory = "LAND",
+                        eventDatetime = "2022-03-28T16:00:00Z",
+                        eventStatus = "PLN",
+                        carrierVoyageNumber = "",
+                        vessel = new { shipId = "" },
+                        location = new { portId = 87 }
+                    }
+                },
+                    transportLegs = new List<object>
+                {
+                    new
+                    {
+                        transportLegId = "9dbe6d964fa84c6761a0cd4710dd40ad",
+                        carrierVoyageNumber = "08WAUE1MA",
+                        vessel = new { shipId = 733029 },
+                        departureLocation = new { portId = 1010 },
+                        portPredictiveDepartureUtc = "",
+                        portActualDepartureUtc = "2022-02-01T10:32:00Z",
+                        arrivalLocation = new { portId = 959 },
+                        portPredictiveArrivalUtc = "",
+                        portActualArrivalUtc = "2022-02-07T10:27:00Z",
+                        anchorageActualArrivalUtc = "",
+                        terminalActualArrivalUtc = "2022-02-07T10:33:00Z"
+                    },
+                    new
+                    {
+                        transportLegId = "273e992a4ced437d66f3c13a681b472a",
+                        carrierVoyageNumber = "147S",
+                        vessel = new { shipId = 199849 },
+                        departureLocation = new { portId = 959 },
+                        portPredictiveDepartureUtc = "",
+                        portActualDepartureUtc = "2022-02-04T05:13:00Z",
+                        arrivalLocation = new { portId = 2999 },
+                        portPredictiveArrivalUtc = "",
+                        portActualArrivalUtc = "2022-02-08T04:11:00Z",
+                        anchorageActualArrivalUtc = "",
+                        terminalActualArrivalUtc = "2022-02-08T04:43:00Z"
+                    },
+                    new
+                    {
+                        transportLegId = "273e992a4ced437d83cefa8fe208463a",
+                        carrierVoyageNumber = "147S",
+                        vessel = new { shipId = 199849 },
+                        departureLocation = new { portId = 2999 },
+                        portPredictiveDepartureUtc = "",
+                        portActualDepartureUtc = "2022-02-09T21:39:00Z",
+                        arrivalLocation = new { portId = 2429 },
+                        portPredictiveArrivalUtc = "",
+                        portActualArrivalUtc = "2022-02-12T06:32:00Z",
+                        anchorageActualArrivalUtc = "",
+                        terminalActualArrivalUtc = "2022-02-12T07:09:00Z"
+                    }
+                },
+                    vessels = new List<object>
+                {
+                    new
+                    {
+                        shipId = 199849,
+                        vesselName= "MAERSK ENSENADA",
+                        vesselIMONumber = 9502958,
+                        vesselMMSINumber = 371274000
+                    },
+                    new
+                    {
+                        shipId = 199849,
+                        vesselName= "MAERSK ENSENADA",
+                        vesselIMONumber = 9502958,
+                        vesselMMSINumber = 371274000
+                    }
+                },
+                    locations = new List<Object> {
+                        new
+                      {
+                        portId = 87,
+                        locationName = "LOS ANGELES",
+                        locationCountry = "USA",
+                        lat = 33.74021,
+                        lon = -118.265,
+                        UNLocationCode = "USLAX",
+                        localTimeOffset = -7
+                      },
+                        new
+                      {
+                        portId = 87,
+                        locationName = "LOS ANGELES",
+                        locationCountry = "USA",
+                        lat = 33.74021,
+                        lon = -118.265,
+                        UNLocationCode = "USLAX",
+                        localTimeOffset = -7
+                      }
+                    }
+            }
+
+        };
+
+            return Ok(shipment);
+        }
+
+
         // POST api/<MembersController>
         [HttpPost("SaveTransaction")]
         public bool Post([FromBody] general_ledger transaction)
