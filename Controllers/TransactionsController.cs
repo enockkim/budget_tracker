@@ -3,6 +3,7 @@ using budget_tracker.Services;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json.Linq;
 using System.Globalization;
 using System.Transactions;
 using Telegram.Bot.Types;
@@ -58,6 +59,29 @@ namespace budget_tracker.Controllers
             //pollyPolicy.AfricasTalkingRetry.Execute(bulkSms.SendSms("+254712490863", "test"));
             telegramBot.SendMessage("test");
             return true;
+        }
+
+        [HttpPost("callback")]
+        public ActionResult CallBack([FromBody] Object body)
+        {
+            //pollyPolicy.AfricasTalkingRetry.Execute(bulkSms.SendSms("+254712490863", "test"));
+            telegramBot.SendMessage("call back recieved");
+            return Ok(body);
+        }
+
+        [HttpGet("subscribe")]
+        public ActionResult Subscribe()
+        {
+            var subscription = new
+            {
+                shipmentId = "UTIDC7GLFZQO0NXA",
+                scac = "MAEU",
+                transportDocumentId = "ABCD421911263977",
+                transportDocumentType = "BL"
+            };
+
+            return Ok(subscription);
+
         }
 
         [HttpGet("shipment")]
