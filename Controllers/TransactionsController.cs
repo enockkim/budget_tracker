@@ -438,6 +438,7 @@ namespace budget_tracker.Controllers
                 foreach (var contact in settings.AdminContacts)
                 {
                     bulkSms.SendSms(contact, messageAdmin);
+
                     //int statusCode = pollyPolicy.AfricasTalkingRetry.Execute(bulkSms.SendSms(contact, messageAdmin));
 
                     //if (statusCode == 101)

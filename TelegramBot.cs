@@ -21,7 +21,10 @@ namespace budget_tracker
         public void SendMessage(string message)
         {
             bot = new TelegramBotClient(settings.TelegramToken);
-            bot.SendTextMessageAsync(settings.TelegramChatId, message);
+            foreach(int chatId in settings.TelegramChatId)
+            {
+                bot.SendTextMessageAsync(chatId, message);
+            }
         }
     }
 }
