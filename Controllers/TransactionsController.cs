@@ -393,7 +393,7 @@ namespace budget_tracker.Controllers
         public void ProcessRequest([FromBody] mpesa_c2b_result context)
         {
             // Log the response
-            Console.WriteLine($"RefNo: {context.TransID} Name: {context.FirstName} {context.MiddleName} {context.LastName} Amount:  {context.TransAmount} Acc:  {context.BillRefNumber}");
+            Console.WriteLine($"RefNo: {context.TransID} Phone: {context.MSISDN} Name: {context.FirstName} {context.MiddleName} {context.LastName} Amount:  {context.TransAmount} Acc:  {context.BillRefNumber}");
 
             logging.WriteToLog($"Name: {context.FirstName} {context.MiddleName} {context.LastName} Acc:  {context.BillRefNumber} Amount:  {context.TransAmount} Balance: {context.OrgAccountBalance}", "Information");
 
