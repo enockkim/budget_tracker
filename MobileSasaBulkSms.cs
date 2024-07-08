@@ -28,21 +28,17 @@ namespace budget_tracker
         private readonly AppSetting settings;
         private readonly Logging logging;
         private readonly TelegramBot telegram;
-        public MobileSasaBulkSms(IOptionsMonitor<AppSetting> settings, Logging logging, TelegramBot telegram)
+        private readonly HttpClient _httpClient;
+        public MobileSasaBulkSms(IOptionsMonitor<AppSetting> settings, Logging logging, TelegramBot telegram, HttpClient httpClient)
         {
             this.settings = settings.CurrentValue;
             this.logging = logging;
             this.telegram = telegram;
-        }
-
-        private readonly HttpClient _httpClient;
-        private const string ApiUrl = "https://api.mobilesasa.com/v1/send/bulk";
-        private const string ApiToken = "jz2Le0d4yt2TpJhfLrlf8elSY3KwXXynl9sdTLmgutjpBgywBxM0ny4r4VQR";
-
-        public SmsService(HttpClient httpClient)
-        {
             _httpClient = httpClient;
         }
+
+        private const string ApiUrl = "https://api.mobilesasa.com/v1/send/bulk";
+        private const string ApiToken = "jz2Le0d4yt2TpJhfLrlf8elSY3KwXXynl9sdTLmgutjpBgywBxM0ny4r4VQR";
 
         public async Task<bool> SendSms(string contact, string message)
         {
@@ -50,9 +46,9 @@ namespace budget_tracker
             {
                 var requestContent = new
                 {
-                    senderID = senderID,
+                    senderID = "MOBILESASA",
                     message = message,
-                    phones = phones
+                    phones = contact
                 };
 
                 var jsonContent = new StringContent(
@@ -73,7 +69,7 @@ namespace budget_tracker
                 else
                 {
                     var errorContent = await response.Content.ReadAsStringAsync();
-                    logging.WriteToLog($"Failed to send message. Status code: {response.StatusCode}, Error: {errorContent}");
+                    logging.WriteToLog($"Failed to send message. Status code: {response.StatusCode}", "Error: {errorContent}");
                     return false;
                 }
             }
