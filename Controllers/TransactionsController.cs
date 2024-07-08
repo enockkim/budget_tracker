@@ -21,12 +21,13 @@ namespace budget_tracker.Controllers
         CultureInfo provider = CultureInfo.InvariantCulture;
 
         private readonly AppSetting settings;
-        private readonly BulkSms bulkSms;
+        // private readonly BulkSms bulkSms;
+        private readonly MobileSasaBulkSms bulkSms;
         private readonly TelegramBot telegramBot;
         private readonly Logging logging;
         private readonly PollyPolicy pollyPolicy;
 
-        public TransactionsController(ILogger<TransactionsController> logger, ITransactionsService _transactionService, IFeePaymentService _feePaymentService, IOptionsMonitor<AppSetting> _settings, BulkSms _bulkSms, TelegramBot _telegramBot, Logging logging, PollyPolicy pollyPolicy)
+        public TransactionsController(ILogger<TransactionsController> logger, ITransactionsService _transactionService, IFeePaymentService _feePaymentService, IOptionsMonitor<AppSetting> _settings, MobileSasaBulkSms _bulkSms, TelegramBot _telegramBot, Logging logging, PollyPolicy pollyPolicy)
         {
             _logger = logger;
             transactionService = _transactionService;
@@ -390,7 +391,7 @@ namespace budget_tracker.Controllers
         }
 
         [HttpPost("Confirmation")]
-        public void ProcessRequest([FromBody] mpesa_c2b_result context)
+        public async void ProcessRequest([FromBody] mpesa_c2b_result context)
         {
             // Log the response
             Console.WriteLine($"RefNo: {context.TransID} Phone: {context.MSISDN} Name: {context.FirstName} {context.MiddleName} {context.LastName} Amount:  {context.TransAmount} Acc:  {context.BillRefNumber}");
@@ -437,7 +438,7 @@ namespace budget_tracker.Controllers
             {
                 foreach (var contact in settings.AdminContacts)
                 {
-                    bulkSms.SendSms(contact, messageAdmin);
+                    await bulkSms.SendSms(contact, messageAdmin);
 
                     //int statusCode = pollyPolicy.AfricasTalkingRetry.Execute(bulkSms.SendSms(contact, messageAdmin));
 
