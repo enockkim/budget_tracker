@@ -28,13 +28,13 @@ namespace budget_tracker
         private readonly AppSetting settings;
         private readonly Logging logging;
         private readonly TelegramBot telegram;
-        private readonly HttpClient _httpClient;
+        private readonly HttpClient httpClient;
         public MobileSasaBulkSms(IOptionsMonitor<AppSetting> settings, Logging logging, TelegramBot telegram, HttpClient httpClient)
         {
             this.settings = settings.CurrentValue;
             this.logging = logging;
             this.telegram = telegram;
-            _httpClient = httpClient;
+            this.httpClient = httpClient;
         }
 
         private const string ApiUrl = "https://api.mobilesasa.com/v1/send/bulk";
@@ -56,11 +56,11 @@ namespace budget_tracker
                     Encoding.UTF8,
                     "application/json");
 
-                _httpClient.DefaultRequestHeaders.Clear();
-                _httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
-                _httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {ApiToken}");
+                httpClient.DefaultRequestHeaders.Clear();
+                httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
+                httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {ApiToken}");
 
-                var response = await _httpClient.PostAsync(ApiUrl, jsonContent);
+                var response = await httpClient.PostAsync(ApiUrl, jsonContent);
 
                 if (response.IsSuccessStatusCode)
                 {

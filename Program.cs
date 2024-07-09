@@ -23,6 +23,7 @@ builder.Services.Configure<AppSetting>(builder.Configuration.GetSection("AppSett
 builder.Services.AddSingleton<TelegramBot>();
 builder.Services.AddSingleton<Logging>();
 builder.Services.AddSingleton<BulkSms>();
+builder.Services.AddHttpClient();
 builder.Services.AddSingleton<MobileSasaBulkSms>();
 builder.Services.AddSingleton<PollyPolicy>();
 builder.Services.AddHostedService<StartupService>();

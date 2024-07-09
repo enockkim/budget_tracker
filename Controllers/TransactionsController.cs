@@ -54,11 +54,18 @@ namespace budget_tracker.Controllers
         //    return groupService.GetMemberById(memberId);
         //}
 
-        [HttpGet("Test")]
-        public bool Test()
+        [HttpPost("TestTelegram")]
+        public bool TestTelegram()
         {
             //pollyPolicy.AfricasTalkingRetry.Execute(bulkSms.SendSms("+254712490863", "test"));
-            telegramBot.SendMessage("test");
+            telegramBot.SendMessage("telegram test message");
+            return true;
+        }
+
+        [HttpPost("TestBulkSms")]
+        public async Task<bool> TestBulkSms([FromBody] string phoneNumberDto)
+        {
+            await bulkSms.SendSms(phoneNumberDto, "test text message");
             return true;
         }
 
@@ -69,6 +76,7 @@ namespace budget_tracker.Controllers
             telegramBot.SendMessage("call back recieved");
             return Ok(body);
         }
+
 
         [HttpGet("subscribe")]
         public ActionResult Subscribe()
