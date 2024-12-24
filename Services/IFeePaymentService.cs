@@ -12,6 +12,6 @@ namespace budget_tracker.Services
     public interface IFeePaymentService
     {
         //Transactions
-        bool SaveFeePayment(fee_payment transaction);
+        Task<bool> SaveFeePayment(fee_payment transaction, string account, string amount);
     }
 }

@@ -21,8 +21,8 @@ namespace budget_tracker.Models
     public class mpesa_c2b_result   
     {
         #region Properties
-        [Key]
         public string TransactionType { get; set; }
+        [Key]
         public string TransID { get; set; }
         public string TransTime { get; set; }
         public string TransAmount { get; set; }

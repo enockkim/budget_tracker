@@ -2,6 +2,7 @@ using budget_tracker;
 using budget_tracker.Services;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
+using Prema.ShuleOne.Web.Server.Database;
 using Serilog;
 using System.Configuration;
 using System.Net;
@@ -19,6 +20,7 @@ builder.Host.UseSerilog(
 
 // Setup database connection    
 var connectionString = builder.Configuration.GetConnectionString("MySqlConnectionString");
+var shuleOneDbConnectionString = builder.Configuration.GetConnectionString("ShuleOneDbConnectionString");
 builder.Services.Configure<AppSetting>(builder.Configuration.GetSection("AppSetting"));
 builder.Services.AddSingleton<TelegramBot>();
 builder.Services.AddSingleton<Logging>();
@@ -28,6 +30,7 @@ builder.Services.AddSingleton<MobileSasaBulkSms>();
 builder.Services.AddSingleton<PollyPolicy>();
 builder.Services.AddHostedService<StartupService>();
 builder.Services.AddDbContextPool<BudgetTrackerDbContext>(options => options.UseMySQL(connectionString));
+builder.Services.AddDbContextPool<ShuleOneDatabaseContext>(options => options.UseMySQL(shuleOneDbConnectionString));
 builder.Services.AddScoped<ITransactionsService, TransactionsService>();
 builder.Services.AddScoped<IFeePaymentService, FeePaymentService>();
 builder.Services.AddHttpContextAccessor();

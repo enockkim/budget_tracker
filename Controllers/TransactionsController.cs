@@ -432,7 +432,7 @@ namespace budget_tracker.Controllers
                     TransactionId_fk = res.Item2
                 };
 
-                var SaveFeePayment = feePaymentService.SaveFeePayment(fee_payment);
+                var SaveFeePayment = await feePaymentService.SaveFeePayment(fee_payment, context.BillRefNumber, context.TransAmount);
             }
 
             //Send sms
