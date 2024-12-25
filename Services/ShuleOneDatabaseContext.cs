@@ -18,21 +18,18 @@ using budget_tracker.Models;
 
 namespace Prema.ShuleOne.Web.Server.Database
 {
-    public partial class ShuleOneDatabaseContext : Microsoft.EntityFrameworkCore.DbContext
+    public class ShuleOneDatabaseContext : Microsoft.EntityFrameworkCore.DbContext
     {
         public ShuleOneDatabaseContext(DbContextOptions<ShuleOneDatabaseContext> options) : base(options)
         {
+            Console.WriteLine("ShuleOneDatabaseContext created");
         }
 
-        partial void OnModelBuilding(ModelBuilder builder);
-
-        protected override void OnModelCreating(ModelBuilder builder)
+        public override void Dispose()
         {
-            base.OnModelCreating(builder);
-
-            this.OnModelBuilding(builder);
+            Console.WriteLine("ShuleOneDatabaseContext disposed");
+            base.Dispose();
         }
-
         public DbSet<County> County { get; set; }
         public DbSet<Subcounty> Subcounty { get; set; }
         public DbSet<Ward> Ward { get; set; }

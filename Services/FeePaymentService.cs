@@ -11,61 +11,69 @@ namespace budget_tracker.Services
         private readonly BudgetTrackerDbContext budgetTrackerDbContext;
         private readonly ShuleOneDatabaseContext shuleOneDatabaseContext;
         private readonly IConfiguration _configuration;
-        PasswordHasher passwordHasher = new PasswordHasher();
         private readonly MobileSasaBulkSms bulkSms;
-        private readonly ILogger _logger;
+        private readonly Logging logging;
 
-        public FeePaymentService(ILogger<FeePaymentService> logger, BudgetTrackerDbContext _budgetTrackerDbContext, ShuleOneDatabaseContext _shuleOneDatabaseContext, IConfiguration configuration, MobileSasaBulkSms _bulkSms)
+        public FeePaymentService(Logging logging, BudgetTrackerDbContext _budgetTrackerDbContext, ShuleOneDatabaseContext _shuleOneDatabaseContext, IConfiguration configuration, MobileSasaBulkSms _bulkSms)
         {
-            _logger = logger;
+            this.logging = logging;
             budgetTrackerDbContext = _budgetTrackerDbContext;
             shuleOneDatabaseContext = _shuleOneDatabaseContext;
             _configuration = configuration;
             bulkSms = _bulkSms;
         }
 
-        //Transactions
         public async Task<bool> SaveFeePayment(fee_payment fee_payment, string account, string amount)
-        {   
+        {
             try
             {
-                var res = budgetTrackerDbContext.Add<fee_payment>(fee_payment);
+                // Add the fee payment to the BudgetTrackerDbContext
+                budgetTrackerDbContext.Add(fee_payment);
 
                 if (int.TryParse(account, out int admissionNumber))
                 {
-                    var student = await shuleOneDatabaseContext.Student.AsNoTracking()
-                        .FirstOrDefaultAsync(student => student.id == admissionNumber);
+                    // Fetch the student record from the ShuleOneDatabaseContext
+                    var student = await shuleOneDatabaseContext.Student
+                        .FirstOrDefaultAsync(s => s.id == admissionNumber);
 
-                    if(student != null)
+                    if (student != null)
                     {
-                        var studentContact = await shuleOneDatabaseContext.StudentContact.AsNoTracking()
-                            .FirstOrDefaultAsync(studentContact => studentContact.fk_student_id == student.id && studentContact.contact_priority == 1);
-                        
-                        string message = $"Hello {studentContact.surname}, your fee payment of Ksh. {amount} for {student.other_names} has been recieved successfully. Thank you! For fee inquires, please contact the school bursar.";
-                        await bulkSms.SendSms(studentContact.phone_number, message);
+                        // Fetch the primary contact for the student
+                        var studentContact = await shuleOneDatabaseContext.StudentContact
+                            .FirstOrDefaultAsync(c => c.fk_student_id == student.id && c.contact_priority == 1);
 
-                        _logger.LogWarning($"Message sent: {message}");
+                        if (studentContact != null)
+                        {
+                            // Send SMS notification
+                            string message = $"Hello {studentContact.surname}, your fee payment of Ksh. {amount} for {student.other_names} has been received successfully. Thank you! For fee inquiries, please contact the school bursar.";
+                            await bulkSms.SendSms(studentContact.phone_number, message);
+
+                            logging.WriteToLog($"Message sent: {message}", "Information");
+                        }
+                        else
+                        {
+                            logging.WriteToLog($"No primary contact found for student ID: {student.id}", "Information");
+                        }                    
                     }
                     else
                     {
-                        _logger.LogWarning($"Missing student record or invalid admission number: {account}");
+                        logging.WriteToLog($"No student found with admission number: {account}", "Warning");
                     }
-                } else
+                }
+                else
                 {
-                    _logger.LogWarning($"Invalid account/admission number: {account}");
+                    logging.WriteToLog($"Invalid account/admission number: {account}", "Warning");
                 }
 
-
-                var result = budgetTrackerDbContext.SaveChanges();
-                                
-                Console.WriteLine("Fee payment saved ->  Account/Index: "+fee_payment.AccountNo);    
-
+                // Save changes to the BudgetTrackerDbContext
+                await budgetTrackerDbContext.SaveChangesAsync();
+                Console.WriteLine("Fee payment saved ->  Account/Index: " + fee_payment.AccountNo);
 
                 return true;
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.ToString());
+                logging.WriteToLog($"Error saving fee payment: {ex.Message}", "Error");
                 return false;
             }
         }
@@ -74,6 +82,5 @@ namespace budget_tracker.Services
         {
             return int.TryParse(account, out _);
         }
-
     }
 }

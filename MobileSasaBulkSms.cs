@@ -46,7 +46,7 @@ namespace budget_tracker
             {
                 var requestContent = new
                 {
-                    senderID = "MOBILESASA",
+                    senderID = "LIFEWAY",
                     message = message,
                     phones = contact
                 };
@@ -69,7 +69,7 @@ namespace budget_tracker
                 else
                 {
                     var errorContent = await response.Content.ReadAsStringAsync();
-                    logging.WriteToLog($"Failed to send message. Status code: {response.StatusCode}", "Error: {errorContent}");
+                    logging.WriteToLog($"Failed to send message. Status code: {response.StatusCode}", "Error");
                     return false;
                 }
             }

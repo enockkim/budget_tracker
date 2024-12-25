@@ -1,6 +1,7 @@
 ﻿using budget_tracker.Models;
 using budget_tracker.Services;
 using Microsoft.AspNetCore;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Linq;
@@ -399,12 +400,12 @@ namespace budget_tracker.Controllers
         }
 
         [HttpPost("Confirmation")]
-        public async void ProcessRequest([FromBody] mpesa_c2b_result context)
+        public async Task<IResult> ProcessRequest([FromBody] mpesa_c2b_result context)
         {
             // Log the response
             Console.WriteLine($"RefNo: {context.TransID} Phone: {context.MSISDN} Name: {context.FirstName} {context.MiddleName} {context.LastName} Amount:  {context.TransAmount} Acc:  {context.BillRefNumber}");
 
-            logging.WriteToLog($"Name: {context.FirstName} {context.MiddleName} {context.LastName} Acc:  {context.BillRefNumber} Amount:  {context.TransAmount} Balance: {context.OrgAccountBalance}", "Information");
+            logging.WriteToLog($"Name: {context.FirstName} {context.MiddleName} {context.LastName}\nAcc:  {context.BillRefNumber} Amount:  {context.TransAmount} Balance: {context.OrgAccountBalance}", "Information");
 
             general_ledger transaction = new general_ledger()
             {
@@ -432,7 +433,7 @@ namespace budget_tracker.Controllers
                     TransactionId_fk = res.Item2
                 };
 
-                var SaveFeePayment = await feePaymentService.SaveFeePayment(fee_payment, context.BillRefNumber, context.TransAmount);
+                await feePaymentService.SaveFeePayment(fee_payment, context.BillRefNumber, context.TransAmount);
             }
 
             //Send sms
@@ -462,6 +463,7 @@ namespace budget_tracker.Controllers
             }
 
             //telegramBot.SendMessage(messageAdminTelegram); //for me to save on sms cost
+            return TypedResults.Ok();
         }
 
         public bool IsReusable

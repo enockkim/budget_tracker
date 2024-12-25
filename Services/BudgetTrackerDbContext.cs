@@ -16,6 +16,13 @@ namespace budget_tracker.Services
         public DbSet<fee_payment> fee_payment { set; get; }
         public BudgetTrackerDbContext(DbContextOptions<BudgetTrackerDbContext> options) : base(options)
         {
+            Console.WriteLine("BudgetTrackerDbContext created");
+        }
+
+        public override void Dispose()
+        {
+            Console.WriteLine("BudgetTrackerDbContext disposed");
+            base.Dispose();
         }
     }
 }

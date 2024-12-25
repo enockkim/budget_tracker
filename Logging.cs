@@ -73,7 +73,11 @@ namespace budget_tracker
                     break;
                 case "Error":
                     log.Error(message);
-                    telegramBot.SendMessage("⚠️ An error occured!");
+                    telegramBot.SendMessage("❌ An error occured!");
+                    break;
+                case "Warning":
+                    log.Warning(message);
+                    telegramBot.SendMessage($"⚠️ A warning occured! \n {message}");
                     break;
                 case "Debug":
                     log.Debug(message);

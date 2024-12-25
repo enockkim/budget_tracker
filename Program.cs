@@ -29,10 +29,20 @@ builder.Services.AddHttpClient();
 builder.Services.AddSingleton<MobileSasaBulkSms>();
 builder.Services.AddSingleton<PollyPolicy>();
 builder.Services.AddHostedService<StartupService>();
-builder.Services.AddDbContextPool<BudgetTrackerDbContext>(options => options.UseMySQL(connectionString));
-builder.Services.AddDbContextPool<ShuleOneDatabaseContext>(options => options.UseMySQL(shuleOneDbConnectionString));
-builder.Services.AddScoped<ITransactionsService, TransactionsService>();
-builder.Services.AddScoped<IFeePaymentService, FeePaymentService>();
+var serverVersion = new MySqlServerVersion(new Version(8, 0, 29));
+
+builder.Services.AddDbContext<ShuleOneDatabaseContext>(
+    dbContextOptions => dbContextOptions
+        .UseMySql(shuleOneDbConnectionString, serverVersion,
+            options => options.EnableRetryOnFailure()) // Enable transient error resiliency
+        .LogTo(Console.WriteLine, LogLevel.Information)
+        .EnableSensitiveDataLogging()
+        .EnableDetailedErrors()
+);
+
+builder.Services.AddDbContext<BudgetTrackerDbContext>(options => options.UseMySQL(connectionString));
+builder.Services.AddTransient<ITransactionsService, TransactionsService>();
+builder.Services.AddTransient<IFeePaymentService, FeePaymentService>();
 builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddControllers();
