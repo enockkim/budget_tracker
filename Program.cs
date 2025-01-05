@@ -11,6 +11,14 @@ using static Org.BouncyCastle.Math.EC.ECCurve;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowSpecificOrigin",
+        builder => builder
+            .WithOrigins("https://localhost:4200", "https://lifeway.prema.co.ke") // Update this with your Angular app's URL
+            .AllowAnyHeader()
+            .AllowAnyMethod());
+});
 // Add services to the container.
 
 // Use Serilog - from configuration
@@ -71,6 +79,8 @@ app.UseForwardedHeaders(new ForwardedHeadersOptions
 });
 
 app.UseHttpsRedirection();
+
+app.UseCors("AllowSpecificOrigin");
 
 app.UseAuthorization();
 
