@@ -465,6 +465,29 @@ namespace budget_tracker.Controllers
             //telegramBot.SendMessage(messageAdminTelegram); //for me to save on sms cost
             return TypedResults.Ok();
         }
+        
+        [HttpGet("TransactionStatus")]
+        public IActionResult CheckTransaction([FromQuery] string transactionId)
+        {
+            if (string.IsNullOrWhiteSpace(transactionId))
+            {
+                return BadRequest(new TransactionResult
+                {
+                    TransactionId = transactionId,
+                    Status = Models.TransactionStatus.NotFound,
+                    Message = "Transaction ID cannot be null or empty."
+                });
+            }
+
+            var result = transactionService.CheckTransaction(transactionId);
+
+            if (result.Status == Models.TransactionStatus.NotFound)
+            {
+                return NotFound(result);
+            }
+
+            return Ok(result);
+        }
 
         public bool IsReusable
         {

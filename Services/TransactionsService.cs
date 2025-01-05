@@ -34,5 +34,29 @@ namespace budget_tracker.Services
                 return Tuple.Create(false, 0);
             }
         }
+
+        public TransactionResult CheckTransaction(string transactionId)
+        {
+            // Fetch transaction from the database
+            var transaction = budgetTrackerDbContext.general_ledger
+                .FirstOrDefault(t => t.Refrence == transactionId);
+
+            if (transaction == null)
+            {
+                return new TransactionResult
+                {
+                    TransactionId = transactionId,
+                    Status = TransactionStatus.NotFound,
+                    Message = "Transaction not found."
+                };
+            }
+
+            return new TransactionResult
+            {
+                TransactionId = transaction.Refrence,
+                Status = TransactionStatus.Success,
+                Message = $"Transaction is successful."
+            };
+        }
     }
 }

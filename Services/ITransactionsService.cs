@@ -13,5 +13,6 @@ namespace budget_tracker.Services
     {
         //Transactions
         Tuple<bool, int> SaveTransaction(general_ledger transaction);
+        TransactionResult CheckTransaction(string transactionId);
     }
 }

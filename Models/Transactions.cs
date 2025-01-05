@@ -36,4 +36,19 @@ namespace budget_tracker.Models
         public string? LastName { get; set; }
         #endregion    
     }
+
+    public class TransactionResult
+    {
+        public string TransactionId { get; set; }
+        public TransactionStatus Status { get; set; }
+        public string Message { get; set; }
+    }
+
+    public enum TransactionStatus
+    {
+        Success,
+        Pending,
+        Failed,
+        NotFound
+    }
 }
