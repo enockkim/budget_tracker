@@ -481,12 +481,42 @@ namespace budget_tracker.Controllers
 
             var result = transactionService.CheckTransaction(transactionId);
 
+
             if (result.Status == Models.TransactionStatus.NotFound)
             {
                 return NotFound(result);
             }
 
             return Ok(result);
+        }
+
+
+        [HttpGet("UpdateAdmissionStatus")]
+        public async Task<IActionResult> UpdateAdmissionStatus([FromQuery] int admissionNumber)
+        {
+            if (admissionNumber < 1000)
+            {
+                return BadRequest(new AdmissionUpdateStatus
+                {
+                    AdmissionNumber = admissionNumber,
+                    AdmissionStatus = "Invalid admission number."
+                });
+            }
+
+            var result = await feePaymentService.UpdateAdmissionStatus(admissionNumber);
+
+            if(result)
+            {
+                return Ok(result);
+            } else
+            {
+                return BadRequest(new AdmissionUpdateStatus
+                {
+                    AdmissionNumber = admissionNumber,
+                    AdmissionStatus = "Error updating admission status."
+                });
+            }
+
         }
 
         public bool IsReusable

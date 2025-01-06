@@ -44,6 +44,14 @@ namespace budget_tracker.Models
         public string Message { get; set; }
     }
 
+
+    public class AdmissionUpdateStatus
+    {
+        public int AdmissionNumber { get; set; }
+        public string AdmissionStatus { get; set; }
+    }
+
+
     public enum TransactionStatus
     {
         Success,
@@ -51,4 +59,6 @@ namespace budget_tracker.Models
         Failed,
         NotFound
     }
+
+
 }

@@ -13,5 +13,7 @@ namespace budget_tracker.Services
     {
         //Transactions
         Task<bool> SaveFeePayment(fee_payment transaction, string account, string amount);
+
+        Task<bool> UpdateAdmissionStatus(int admissionNumber);
     }
 }

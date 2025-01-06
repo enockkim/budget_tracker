@@ -84,5 +84,49 @@ namespace budget_tracker.Services
         {
             return int.TryParse(account, out _);
         }
+
+
+        public async Task<bool> UpdateAdmissionStatus(int admissionNumber)
+        {
+            var student = await shuleOneDatabaseContext.Student
+                .FirstOrDefaultAsync(s => s.id == admissionNumber);
+
+            student.admission_status = AdmissionStatus.Admitted;
+
+            await shuleOneDatabaseContext.SaveChangesAsync();
+
+            if (student != null)
+            {
+                // Fetch the primary contact for the student
+                var studentContact = await shuleOneDatabaseContext.StudentContact
+                    .FirstOrDefaultAsync(c => c.fk_student_id == student.id && c.contact_priority == 1);
+                               
+
+                if (studentContact != null)
+                {
+
+
+                    //send message to parent/guardian
+                    string parentName = $"{studentContact.other_names} {studentContact.surname}";
+                    string childName = $"{student.other_names} {student.surname}";
+                    string message = $"Dear {parentName}, your child, {childName}, has been admitted to Lifeway Christian School. Admission No: {student.id}. Welcome to an exciting learning journey with us!";
+
+
+                    await bulkSms.SendSms(studentContact.phone_number, message);
+
+                    logging.WriteToLog($"Admission message sent: {message}", "Information");
+                }
+                else
+                {
+                    logging.WriteToLog($"No primary contact found for student ID: {student.id}", "Information");
+                }
+            }
+            else
+            {
+                logging.WriteToLog($"No student found with admission number: {admissionNumber}", "Warning");
+            }
+
+            return true;
+        }
     }
 }
