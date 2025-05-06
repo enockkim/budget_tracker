@@ -27,8 +27,18 @@ namespace budget_tracker.Controllers
         private readonly TelegramBot telegramBot;
         private readonly Logging logging;
         private readonly PollyPolicy pollyPolicy;
+        private readonly RevenueApiClient revenueApiClient;
 
-        public TransactionsController(ILogger<TransactionsController> logger, ITransactionsService _transactionService, IFeePaymentService _feePaymentService, IOptionsMonitor<AppSetting> _settings, MobileSasaBulkSms _bulkSms, TelegramBot _telegramBot, Logging logging, PollyPolicy pollyPolicy)
+        public TransactionsController
+            (ILogger<TransactionsController> logger, 
+            ITransactionsService _transactionService, 
+            IFeePaymentService _feePaymentService, 
+            IOptionsMonitor<AppSetting> _settings,
+            MobileSasaBulkSms _bulkSms, 
+            TelegramBot _telegramBot, 
+            Logging logging,
+            PollyPolicy pollyPolicy,
+            RevenueApiClient revenueApiClient)
         {
             _logger = logger;
             transactionService = _transactionService;
@@ -38,6 +48,7 @@ namespace budget_tracker.Controllers
             telegramBot = _telegramBot;
             this.logging = logging;
             this.pollyPolicy = pollyPolicy;
+            this.revenueApiClient = revenueApiClient;
         }
 
 
@@ -463,6 +474,26 @@ namespace budget_tracker.Controllers
             }
 
             //telegramBot.SendMessage(messageAdminTelegram); //for me to save on sms cost
+
+            //send to new app Prema.ShuleOne
+            try
+            {
+                await revenueApiClient.PostRevenueAsync(new Revenue
+                {
+                    amount = transaction.Amount,
+                    paid_by = context.MSISDN,
+                    payment_reference = context.TransID,
+                    account_number = context.BillRefNumber,
+                    status = RevenueStatus.Unallocated,
+                    payment_date = DateTime.ParseExact(context.TransTime, "yyyyMMddHHmmss", provider),
+                    payment_method = PaymentMethod.Mpesa
+                });
+            }
+            catch (Exception ex)
+            {
+                logging.WriteToLog($"Error posting payment to new app: {ex.Message}", "Error");
+            }
+
             return TypedResults.Ok();
         }
         
