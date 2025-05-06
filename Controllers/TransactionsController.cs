@@ -486,7 +486,8 @@ namespace budget_tracker.Controllers
                     account_number = context.BillRefNumber,
                     status = RevenueStatus.Unallocated,
                     payment_date = DateTime.ParseExact(context.TransTime, "yyyyMMddHHmmss", provider),
-                    payment_method = PaymentMethod.Mpesa
+                    payment_method = PaymentMethod.Mpesa,
+                    recorded_by = "0"
                 });
             }
             catch (Exception ex)
