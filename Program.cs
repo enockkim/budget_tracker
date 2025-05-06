@@ -51,6 +51,7 @@ builder.Services.AddDbContext<ShuleOneDatabaseContext>(
 builder.Services.AddDbContext<BudgetTrackerDbContext>(options => options.UseMySQL(connectionString));
 builder.Services.AddTransient<ITransactionsService, TransactionsService>();
 builder.Services.AddTransient<IFeePaymentService, FeePaymentService>();
+builder.Services.AddSingleton<RevenueApiClient>();
 builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddControllers();
