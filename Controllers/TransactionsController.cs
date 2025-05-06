@@ -481,7 +481,7 @@ namespace budget_tracker.Controllers
                 await revenueApiClient.PostRevenueAsync(new Revenue
                 {
                     amount = transaction.Amount,
-                    paid_by = context.MSISDN,
+                    paid_by = $"{context.FirstName} {context.MiddleName} {context.LastName}",
                     payment_reference = context.TransID,
                     account_number = context.BillRefNumber,
                     status = RevenueStatus.Unallocated,
