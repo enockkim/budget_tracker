@@ -476,23 +476,23 @@ namespace budget_tracker.Controllers
             //telegramBot.SendMessage(messageAdminTelegram); //for me to save on sms cost
 
             //send to new app Prema.ShuleOne
-            try
-            {
-                await revenueApiClient.PostRevenueAsync(new Revenue
-                {
-                    amount = transaction.Amount,
-                    paid_by = context.MSISDN,
-                    payment_reference = context.TransID,
-                    account_number = context.BillRefNumber,
-                    status = RevenueStatus.Unallocated,
-                    payment_date = DateTime.ParseExact(context.TransTime, "yyyyMMddHHmmss", provider),
-                    payment_method = PaymentMethod.Mpesa
-                });
-            }
-            catch (Exception ex)
-            {
-                logging.WriteToLog($"Error posting payment to new app: {ex.Message}", "Error");
-            }
+            //try
+            //{
+            //    await revenueApiClient.PostRevenueAsync(new Revenue
+            //    {
+            //        amount = transaction.Amount,
+            //        paid_by = context.MSISDN,
+            //        payment_reference = context.TransID,
+            //        account_number = context.BillRefNumber,
+            //        status = RevenueStatus.Unallocated,
+            //        payment_date = DateTime.ParseExact(context.TransTime, "yyyyMMddHHmmss", provider),
+            //        payment_method = PaymentMethod.Mpesa
+            //    });
+            //}
+            //catch (Exception ex)
+            //{
+            //    logging.WriteToLog($"Error posting payment to new app: {ex.Message}", "Error");
+            //}
 
             return TypedResults.Ok();
         }
