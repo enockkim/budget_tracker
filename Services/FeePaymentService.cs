@@ -45,7 +45,7 @@ namespace budget_tracker.Services
                         if (studentContact != null)
                         {
                             // Send SMS notification
-                            string message = $"Hello {studentContact.surname}, your fee payment of Ksh. {amount} for {student.other_names} has been received successfully. Thank you! For fee inquiries, please contact the school bursar.";
+                            string message = $"Hello {studentContact.surname}, your fee payment of Ksh. {amount} for {student.other_names} has been received successfully. Thank you! For fee inquiries, please contact the school bursar at 0746974273.";
                             await bulkSms.SendSms(studentContact.phone_number, message);
 
                             logging.WriteToLog($"Message sent: {message}", "Information");
