@@ -10,7 +10,7 @@ using static Org.BouncyCastle.Math.EC.ECCurve;
 
 
 var builder = WebApplication.CreateBuilder(args);
-
+builder.WebHost.UseUrls("http://0.0.0.0:5000");
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowSpecificOrigin",
